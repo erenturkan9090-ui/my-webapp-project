@@ -5,6 +5,9 @@
   body {
     background-color: rgb(12, 12, 142); 
     text-align: center;     
+    display: flex;
+    align-items: center;
+    height: 100vh;
   }
 
   h2 {
@@ -12,9 +15,11 @@
   }
 </style>   
 </head>
-<body>
+<body style="display: flex; align-items: center; height: 100vh;">
 
-<h2>Hello World!</h2>
+<div style="display: flex; align-items: center; height: 100vh;">
+  <h2>Hello World!</h2>
+</div>
 
 </body>
 </html>
