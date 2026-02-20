@@ -8,7 +8,7 @@
   }
 
   h2 {
-    color: rgb(223, 216, 6);           
+    color: rgb(223, 216, 7);           
   }
 </style>   
 </head>
