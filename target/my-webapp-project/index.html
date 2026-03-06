@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>TODO List</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        #task-list { list-style: none; padding: 0; }
+        #task-list li { margin: .5rem 0; }
+        .completed { text-decoration: line-through; color: gray; }
+        button.delete-btn { margin-left: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>TODO List</h1>
+    <form id="add-form">
+        <input type="text" id="title" placeholder="New task..." required />
+        <button type="submit">Add</button>
+    </form>
+    <ul id="task-list"></ul>
+
+    <script>
+        // Build API path relative to current app context so requests work whether
+        // the app is served at root or under a context path like /my-webapp-project/
+        (function(){
+            let base = window.location.pathname;
+            if (!base.endsWith('/')) base = base + '/';
+            window.__TODO_API_BASE = base + 'api/tasks';
+        })();
+        const api = window.__TODO_API_BASE;
+
+        async function fetchTasks() {
+            const res = await fetch(api);
+            const tasks = await res.json();
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            tasks.forEach(t => {
+                const li = document.createElement('li');
+                li.textContent = t.title;
+                if (t.completed) li.classList.add('completed');
+                const del = document.createElement('button');
+                del.textContent = 'Delete';
+                del.className = 'delete-btn';
+                del.onclick = () => deleteTask(t.id);
+                li.appendChild(del);
+                list.appendChild(li);
+            });
+        }
+
+        async function addTask(title) {
+            const body = new URLSearchParams();
+            body.append('title', title);
+            body.append('completed', 'false');
+            await fetch(api, { method: 'POST', body });
+            await fetchTasks();
+        }
+
+        async function deleteTask(id) {
+            await fetch(api + '/' + id, { method: 'DELETE' });
+            await fetchTasks();
+        }
+
+        document.getElementById('add-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const input = document.getElementById('title');
+            if (input.value.trim()) {
+                addTask(input.value.trim());
+                input.value = '';
+            }
+        });
+
+        fetchTasks();
+    </script>
+</body>
+</html>
