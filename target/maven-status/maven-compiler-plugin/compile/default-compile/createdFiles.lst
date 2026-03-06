@@ -1,0 +1,5 @@
+com\example\dao\TaskDAO.class
+com\example\DatabaseInitializer.class
+com\example\model\Task.class
+com\example\servlet\TasksServlet.class
+com\example\DatabaseShutdownListener.class
